@@ -113,3 +113,72 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    def test_get_existing_object(self):
+        """Test retrieving an existing object"""
+        # Create a new State object
+        state = State(name="California")
+        storage.new(state)
+        storage.save()
+
+        # Retrieve the State object using get method
+        retrieved_state = storage.get(State, state.id)
+
+        # Check if retrieved object is the same as the original
+        self.assertEqual(retrieved_state, state)
+
+    def test_get_non_existing_object(self):
+        """Test retrieving a non-existing object"""
+        # Retrieve a non-existing City object
+        retrieved_city = storage.get(City, "non_existing_id")
+
+        # Check that the retrieved object is None
+        self.assertIsNone(retrieved_city)
+
+    def test_count_all_objects(self):
+        """Test counting all objects in storage"""
+        # Create some objects
+        state1 = State(name="New York")
+        state2 = State(name="Texas")
+        city1 = City(name="New York City", state_id=state1.id)
+        city2 = City(name="Houston", state_id=state2.id)
+
+        # Add objects to storage
+        storage.new(state1)
+        storage.new(state2)
+        storage.new(city1)
+        storage.new(city2)
+        storage.save()
+
+        # Count all objects in storage
+        count = storage.count()
+
+        # Check that count matches the total number of objects
+        self.assertEqual(count, 4)
+
+    def test_count_objects_by_class(self):
+        """Test counting objects of a specific class in storage"""
+        # Create some objects
+        state1 = State(name="California")
+        state2 = State(name="Florida")
+        city1 = City(name="Los Angeles", state_id=state1.id)
+        city2 = City(name="Miami", state_id=state2.id)
+
+        # Add objects to storage
+        storage.new(state1)
+        storage.new(state2)
+        storage.new(city1)
+        storage.new(city2)
+        storage.save()
+
+        # Count State objects in storage
+        state_count = storage.count(State)
+
+        # Check that state_count matches the number of State objects
+        self.assertEqual(state_count, 2)
+
+        # Count City objects in storage
+        city_count = storage.count(City)
+
+        # Check that city_count matches the number of City objects
+        self.assertEqual(city_count, 2)
