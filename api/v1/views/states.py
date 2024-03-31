@@ -17,10 +17,10 @@ from flasgger.utils import swag_from
 def states():
     """Method to get all the states"""
     states = storage.all(State).values()
-    list_of_stat = []
+    list_of_states = []
     for state in states:
-        list_of_stat.append(state.to_dict())
-    return jsonify(list_of_stat)
+        list_of_states.append(state.to_dict())
+    return jsonify(list_of_states)
 
 
 @app_views.route("/states/<state_id>", methods=["GET"],
@@ -60,7 +60,7 @@ def create_state():
     if 'name' not in request.get_json():
         abort(400, description="Missing name")
 
-    date = request.get_json()
+    data = request.get_json()
     instance = State(**data)
     instance.save()
     return make_response(jsonify(instance.to_dict()), 201)
@@ -78,11 +78,8 @@ def update_state(state_id):
     if not request.get_json():
         abort(400, description="Not a JSON")
 
-    ignore = ['id', 'created_at', 'updated_at']
-
-    date = request.get_json()
+    data = request.get_json()
     for key, value in data.items():
-        if key not in ignore:
-            setattr(state, key, value)
+        setattr(state, key, value)
     storage.save()
     return make_response(jsonify(state.to_dict()), 200)
