@@ -1,0 +1,26 @@
+# Byte-compiled / optimized Python files
+__pycache__/
+*.py[cod]
+
+# Python virtual environments
+venv/
+env/
+
+# macOS system files
+.DS_Store
+
+# Compiled Python files
+*.pyc
+
+# IDE files (example: PyCharm)
+.idea/
+
+# Editors' temporary/backup files
+*~
+*.swp
+
+# Log files
+*.log
+
+# Dependency directories
+node_modules/
